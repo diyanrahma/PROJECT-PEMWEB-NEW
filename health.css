@@ -1,0 +1,256 @@
+/* BAGIAN NAVBAR */
+body {
+    background-color: #241c15;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 7%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+}
+
+/* NAVBAR LOGO */
+.navbar .navbar-logo {
+    font-size: 1.4rem;
+    font-weight: 500;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    text-decoration: none;
+    color:white;
+}
+
+.navbar .navbar-logo span {
+    color: #b0a695;
+}
+
+/* NAVBAR NAV */
+.navbar .navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.navbar .navbar-nav a {
+    color: white;
+    display: inline-block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    margin-right: 0.6rem;
+    margin-left: 0.6rem;
+    position: relative;
+}
+
+.navbar .navbar-nav a:hover {
+    color: #EBE3D5;
+    border-bottom: 1px solid #EBE3D5;
+}
+
+/* NAVBAR JOIN ONLINE */
+.navbar .navbar-nav .satu {
+    padding: 8px 16px;
+    border: 1px solid white;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+}
+
+.navbar .navbar-nav .satu:hover {
+    color: #241c15;
+}
+
+.navbar .navbar-nav .satu::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0);
+    z-index: -1;
+    transition: background-color 0.3s ease;
+}
+
+.navbar .navbar-nav .satu:hover::after {
+    background-color: #EBE3D5;
+}
+
+/* NAVBAR IKON */
+.navbar .navbar-nav a .one {
+    display: block; /* Menjadikan ikon sebagai block element */
+    border-bottom: none; /* Menghapus border bottom */
+}
+
+.navbar .navbar-nav a .one::after {
+    content: 'TIMETABLE'; /* Isi dengan teks yang Anda inginkan */
+    position: absolute;
+    bottom: -14px; /* Sesuaikan posisi vertikal teks */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 0.4rem;
+}
+
+.navbar .navbar-nav a .one:hover::after {
+    opacity: 1;
+}
+
+.navbar .navbar-nav a .two {
+    display: block; /* Menjadikan ikon sebagai block element */
+    border-bottom: none; /* Menghapus border bottom */
+}
+
+.navbar .navbar-nav a .two::after {
+    content: 'LOCATION'; /* Isi dengan teks yang Anda inginkan */
+    position: absolute;
+    bottom: -14px; /* Sesuaikan posisi vertikal teks */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 0.4rem;
+}
+
+.navbar .navbar-nav a .two:hover::after {
+    opacity: 1;
+}
+
+.navbar .navbar-nav a .three {
+    display: block; /* Menjadikan ikon sebagai block element */
+    border-bottom: none; /* Menghapus border bottom */
+}
+
+.navbar .navbar-nav a .three::after {
+    content: 'PROFILE'; /* Isi dengan teks yang Anda inginkan */
+    position: absolute;
+    bottom: -14px; /* Sesuaikan posisi vertikal teks */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 0.4rem;
+}
+
+.navbar .navbar-nav a .three:hover::after {
+    opacity: 1;
+}
+
+/* BAGIAN BERANDA / MENU UTAMA */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    background-image: url('Aset/health.png');
+}
+
+.hero .content {
+    padding: 1.4rem 7%;
+    max-width: 60rem;
+    text-align: left;
+    color: white;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+}
+
+.hero .content h1 {
+    font-size: 3.2rem;
+    color: white;
+    text-shadow: 1px 1px 3px #241c15;
+    line-height: 1.2;
+}
+
+.hero .content h1 span {
+    color: #241c15;
+    text-shadow: none;
+}
+
+.isii .bg {
+    background-color: #EBE3D5;
+    margin-left: 6rem;
+    margin-right: 6rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 6px;
+}
+
+.isii .bg .konten {
+    padding-right: 2rem;
+    padding-left: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.isii .bg .konten h2 {
+    font-family: 'Poppins', sans-serif;
+    color: #241c15;
+}
+
+.isii .bg .konten p {
+    font-family: 'Poppins', sans-serif;
+    color: #241c15;
+}
+
+/* FOOTER BARU */
+.footer {
+    font-family: 'Poppins', sans-serif;
+    margin-left: 6rem;
+    margin-right: 6rem;
+    color: white;
+    display: flex;
+    justify-content: space-between; /* Memastikan class isi dan kolomjudul berada di samping */
+}
+
+.footer .isi {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* atau sesuaikan dengan jumlah dan lebar kolom yang diinginkan */
+    gap: 10px; /* atau sesuaikan dengan jarak antar elemen */
+}
+
+.kolomjudul,
+.isi {
+    display: inline-block; /* Membuat kolomjudul dan isi berada sejajar */
+    vertical-align: top; /* Memastikan isi tetap berada di atas */
+}
+
+.kolomjudul {
+    width: 30%; /* Atur lebar sesuai kebutuhan */
+}
+
+.isi {
+    width: 65%; /* Atur lebar sesuai kebutuhan */
+}
+
+.footer .kolomjudul a {
+    font-size: 1.4rem;
+    font-weight: 500;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    text-decoration: none;
+    color:white;
+}
+
+.footer .kolomjudul a span {
+    color: #b0a695;
+}
+
+.bawah {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    text-align: center;
+    color: white;
+}
