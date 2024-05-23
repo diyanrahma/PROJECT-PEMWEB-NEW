@@ -13,20 +13,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die("Koneksi gagal: " . mysqli_connect_error());
     }
 
+    // Mendapatkan ID user baru
+    $query_get_next_id = "SELECT CONCAT('U', LPAD(COALESCE(MAX(SUBSTRING(id_user, 2) + 1), 1), 7, '0')) AS next_id FROM user";
+    $result_get_next_id = mysqli_query($conn, $query_get_next_id);
+    $row = mysqli_fetch_assoc($result_get_next_id);
+    $next_id = $row['next_id'];
+
     // Mengambil data dari form
+    $email = $_POST['email'];
     $nama_depan = $_POST['nama_depan'];
     $nama_belakang = $_POST['nama_belakang'];
-    $alamat = $_POST['alamat'];
-    $telpon = $_POST['telpon'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $tgl_lahir = $_POST['tgl_lahir'];
+    $no_telp = $_POST['no_telp'];
 
-    // Menyimpan data ke tabel admin
-    $query = "INSERT INTO admin (nama_depan, nama_belakang, alamat, telpon, username, password) 
-              VALUES ('$nama_depan', '$nama_belakang', '$alamat', '$telpon', '$username', '$password')";
+    // Menyimpan data ke tabel member
+    $query = "INSERT INTO user (id_user, email, nama_depan, nama_belakang, tgl_lahir, no_telp) 
+              VALUES ('$next_id', '$email', '$nama_depan', '$nama_belakang', '$tgl_lahir', '$no_telp')";
 
     if (mysqli_query($conn, $query)) {
-        echo "<p>Admin baru berhasil ditambahkan.</p>";
+        echo "<p>Member baru berhasil ditambahkan.</p>";
     } else {
         echo "Error: " . $query . "<br>" . mysqli_error($conn);
     }
@@ -41,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Admin</title>
+    <title>Tambah Member</title>
 
     <style>
         body {
@@ -164,36 +169,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <a href="tambahtrainer.php">Tambah Trainer</a>
             </div>
         </div>
-        <a href="admin_data.php?type=pembayaran">Konfirmasi Pembayaran</a>
+        <a href="konfirmasi_pembayaran.php">Konfirmasi Pembayaran</a>
     </div>
 </div>
 
 <div class="content">
     <div class="form-container">
-        <h2>Tambah Admin</h2>
-        <form action="tambahadmin.php" method="POST">
+        <h2>Tambah User</h2>
+        <form action="tambahmember.php" method="POST">
+            <label for="email">Nama Email:</label>
+            <input type="text" id="email" name="email" required>
+
             <label for="nama_depan">Nama Depan:</label>
             <input type="text" id="nama_depan" name="nama_depan" required>
 
             <label for="nama_belakang">Nama Belakang:</label>
             <input type="text" id="nama_belakang" name="nama_belakang" required>
 
-            <label for="alamat">Alamat:</label>
-            <input type="text" id="alamat" name="alamat" required>
+            <label for="tgl_lahir">Tanggal Lahir:</label>
+            <input type="date" id="tgl_lahir" name="tgl_lahir" required>
 
-            <label for="telpon">Telpon:</label>
-            <input type="text" id="telpon" name="telpon" required>
-
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <input type="submit" value="Tambah Admin">
+            <label for="no_telp">Telpon:</label>
+            <input type="text" id="no_telp" name="no_telp" required>
+            
+            <input type="submit" value="Tambah Member">
         </form>
     </div>
-</body>
-</html>
+</div>
 </body>
 </html>

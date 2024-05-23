@@ -1,39 +1,56 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Koneksi ke database
-    $servername = "localhost";
-    $database = "membership_gym";
-    $db_username = "root";
-    $db_password = "";
+// Koneksi ke database
+$servername = "localhost";
+$database = "membership_gym";
+$db_username = "root";
+$db_password = "";
 
-    $conn = mysqli_connect($servername, $db_username, $db_password, $database);
+$conn = mysqli_connect($servername, $db_username, $db_password, $database);
 
-    // Memeriksa koneksi
-    if (!$conn) {
-        die("Koneksi gagal: " . mysqli_connect_error());
-    }
-
-    // Mengambil data dari form
-    $nama_depan = $_POST['nama_depan'];
-    $nama_belakang = $_POST['nama_belakang'];
-    $alamat = $_POST['alamat'];
-    $telpon = $_POST['telpon'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    // Menyimpan data ke tabel admin
-    $query = "INSERT INTO admin (nama_depan, nama_belakang, alamat, telpon, username, password) 
-              VALUES ('$nama_depan', '$nama_belakang', '$alamat', '$telpon', '$username', '$password')";
-
-    if (mysqli_query($conn, $query)) {
-        echo "<p>Admin baru berhasil ditambahkan.</p>";
-    } else {
-        echo "Error: " . $query . "<br>" . mysqli_error($conn);
-    }
-
-    // Menutup koneksi
-    mysqli_close($conn);
+// Memeriksa koneksi
+if (!$conn) {
+    die("Koneksi gagal: " . mysqli_connect_error());
 }
+
+// Mencari ID trainer terakhir
+$queryLastId = "SELECT id_trainer FROM trainer ORDER BY id_trainer DESC LIMIT 1";
+$resultLastId = mysqli_query($conn, $queryLastId);
+if ($resultLastId && mysqli_num_rows($resultLastId) > 0) {
+    $lastId = mysqli_fetch_assoc($resultLastId)['id_trainer'];
+    // Mengambil angka dari ID terakhir
+    $lastIdNumber = intval(substr($lastId, 3));
+    // Membuat ID baru dengan menambahkan 1 ke angka terakhir
+    $newIdNumber = $lastIdNumber + 1;
+    // Mengonversi ID baru ke format yang diinginkan (misal: TRN0000006)
+    $newId = "TRN" . str_pad($newIdNumber, 7, "0", STR_PAD_LEFT);
+} else {
+    // Jika tidak ada data trainer, ID pertama adalah TRN0000001
+    $newId = "TRN0000001";
+}
+
+// Menyimpan data ke database jika form disubmit
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama = $_POST['nama'];
+    $alamat = $_POST['alamat'];
+    $tgl_lahir = $_POST['tgl_lahir'];
+    $jenis_kelamin = $_POST['jenis_kelamin'];
+    $no_telp = $_POST['no_telp'];
+
+    $query_insert = "INSERT INTO trainer (id_trainer, nama, alamat, tgl_lahir, jenis_kelamin, no_telp) VALUES ('$newId', '$nama', '$alamat', '$tgl_lahir', '$jenis_kelamin', '$no_telp')";
+    $result_insert = mysqli_query($conn, $query_insert);
+
+    if ($result_insert) {
+        echo "<script>alert('Data trainer berhasil disimpan');</script>";
+        // Redirect atau refresh halaman jika ingin kembali ke halaman sebelumnya
+        // header("Location: tabel_trainer.php");
+    } else {
+        echo "<script>alert('Gagal menyimpan data trainer');</script>";
+        echo "Error: " . $query_insert . "<br>" . mysqli_error($conn);
+    }
+}
+
+// Menutup koneksi
+mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Admin</title>
+    <title>Tambah Trainer</title>
 
     <style>
         body {
@@ -170,30 +187,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <div class="content">
     <div class="form-container">
-        <h2>Tambah Admin</h2>
-        <form action="tambahadmin.php" method="POST">
-            <label for="nama_depan">Nama Depan:</label>
-            <input type="text" id="nama_depan" name="nama_depan" required>
-
-            <label for="nama_belakang">Nama Belakang:</label>
-            <input type="text" id="nama_belakang" name="nama_belakang" required>
-
+        <h2>Tambah Trainer</h2>
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
+            <label for="nama">Nama:</label>
+            <input type="text" id="nama" name="nama" required>
             <label for="alamat">Alamat:</label>
             <input type="text" id="alamat" name="alamat" required>
-
-            <label for="telpon">Telpon:</label>
-            <input type="text" id="telpon" name="telpon" required>
-
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <input type="submit" value="Tambah Admin">
+            <label for="tgl_lahir">Tanggal Lahir:</label>
+            <input type="date" id="tgl_lahir" name="tgl_lahir" required>
+            <label for="jenis_kelamin">Jenis Kelamin:</label>
+            <select id="jenis_kelamin" name="jenis_kelamin" required>
+                <option value="Laki - laki">Laki - laki</option>
+                <option value="Perempuan">Perempuan</option>
+            </select>
+            <label for="no_telp">Nomor Telepon:</label>
+            <input type="text" id="no_telp" name="no_telp" required>
+            <input type="submit" value="Simpan">
         </form>
     </div>
-</body>
-</html>
+</div>
 </body>
 </html>

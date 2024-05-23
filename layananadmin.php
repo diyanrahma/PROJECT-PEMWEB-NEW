@@ -114,14 +114,14 @@ $result = mysqli_query($conn, $query);
         <div class="has-submenu">
             <a href="#">Member</a>
             <div class="submenu">
-                <a href="admin_data.php?type=member&action=view">Data Member</a>
-                <a href="admin_data.php?type=member&action=add">Tambah Member</a>
+                <a href="tabel_member.php">Data Member</a>
+                <a href="tambahadmin.php">Tambah Member</a>
             </div>
         </div>
         <div class="has-submenu">
             <a href="#">Trainer</a>
             <div class="submenu">
-                <a href="admin_data.php?type=trainer&action=view">Data Trainer</a>
+                <a href="tabel_trainer.php">Data Trainer</a>
                 <a href="admin_data.php?type=trainer&action=add">Tambah Trainer</a>
             </div>
         </div>
