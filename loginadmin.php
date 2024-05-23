@@ -18,27 +18,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Query untuk memeriksa apakah username ada dalam database
-    $query = "SELECT * FROM admin WHERE username = '$username'";
-    $result = mysqli_query($conn, $query);
+    $query = $conn->prepare("SELECT * FROM admin WHERE username = ?");
+    if ($query) {
+        $query->bind_param("s", $username);
+        $query->execute();
+        $result = $query->get_result();
 
-    if (mysqli_num_rows($result) > 0) {
-        // Username ditemukan, periksa apakah password cocok
-        $row = mysqli_fetch_assoc($result);
-        if ($password === $row['password']) { // Membandingkan password yang dimasukkan dengan yang ada di database
-            // Password cocok, redirect ke halaman admin
-            header("Location: admin.php");
-            exit();
+        if ($result->num_rows > 0) {
+            // Username ditemukan, periksa apakah password cocok
+            $row = $result->fetch_assoc();
+            if ($password === $row['password']) { // Membandingkan password yang dimasukkan dengan yang ada di database
+                // Password cocok, simpan data login dan redirect ke halaman admin
+                $login_query = $conn->prepare("INSERT INTO login_admin (username, password, login_time) VALUES (?, ?, NOW())");
+                if ($login_query) {
+                    $login_query->bind_param("ss", $username, $password);
+                    $login_query->execute();
+                    $login_query->close();
+                } else {
+                    die("Error preparing login query: " . $conn->error);
+                }
+
+                header("Location: admin.php");
+                exit();
+            } else {
+                // Password tidak cocok, tampilkan pesan error
+                $error_message = "Password salah.";
+            }
         } else {
-            // Password tidak cocok, tampilkan pesan error
-            $error_message = "Password salah.";
+            // Username tidak ditemukan, tampilkan pesan error
+            $error_message = "Username tidak ditemukan.";
         }
+        $query->close();
     } else {
-        // Username tidak ditemukan, tampilkan pesan error
-        $error_message = "Username tidak ditemukan.";
+        $error_message = "Query preparation failed: " . $conn->error;
     }
 
     // Menutup koneksi
-    mysqli_close($conn);
+    $conn->close();
 }
 ?>
 
