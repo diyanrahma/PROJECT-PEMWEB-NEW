@@ -100,17 +100,17 @@
             </div>
             <a href="layananadmin.php">Layanan</a>
             <div class="has-submenu">
-                <a href="#">Member</a>
+                <a href="#">User</a>
                 <div class="submenu">
-                    <a href="tabel_admin.php">Data Member</a>
-                    <a href="admin_data.php?type=member&action=add">Tambah Member</a>
+                    <a href="tabel_member.php">Data User</a>
+                    <a href="tambahmember.php">Tambah User</a>
                 </div>
             </div>
             <div class="has-submenu">
                 <a href="#">Trainer</a>
                 <div class="submenu">
-                    <a href="admin_data.php?type=triner&action=view">Data Trainer</a>
-                    <a href="admin_data.php?type=trainer&action=add">Tambah Trainer</a>
+                    <a href="tabel_trainer.php">Data Trainer</a>
+                    <a href="tambahtrainer.php">Tambah Trainer</a>
                 </div>
             </div>
             <a href="admin_data.php?type=pembayaran">Konfirmasi Pembayaran</a>
