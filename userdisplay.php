@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
 
+    <!-- Your CSS links and other meta tags -->
     <link rel="stylesheet" href="user.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,19 +18,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar" style="background-color: #241c15;">
-        <a href="indexnew.php" class="navbar-logo">Membership<span>Gym.</span></a>
-        <div class="navbar-nav">
-            <a href="indexnew.php">HOME</a>
-            <a href="layanann.php">LAYANAN</a>
-            <a href="galerii.php">GALERI</a>
-            <a href="contactt.php">CONTACT US</a>
-            <a href="profil.php" class="satu">JOIN ONLINE ></a>
-            <a href="lokasii.php" id="lokasi" class="two"><i class="fa-solid fa-location-dot two" style="font-size: 1.3rem;"></i></a>
-            <a href="indexnew.php" id="user" class="three"><i class="fa-solid fa-user three" style="font-size: 1.3rem;"></i></a>
-            <a href="#" id="translate">ID | EN ></a>
-        </div>
-    </nav>
+    <!-- Your navigation bar and other HTML content -->
 
     <section class="hero" id="home">
         <main class="content">
@@ -44,50 +32,49 @@
         </div>
         <div class="kedua">
             <div>
-                <p>Email: <?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?></p>
-                <p>Nama Depan: <?php echo isset($_POST['nama_depan']) ? $_POST['nama_depan'] : ''; ?></p>
-                <p>Nama Belakang: <?php echo isset($_POST['nama_belakang']) ? $_POST['nama_belakang'] : ''; ?></p>
-                <p>Tanggal Lahir: <?php echo isset($_POST['tgl_lahir']) ? $_POST['tgl_lahir'] : ''; ?></p>
-                <p>No. Telepon: <?php echo isset($_POST['no_telp']) ? $_POST['no_telp'] : ''; ?></p>
+                <?php
+                // Konfigurasi database
+                $servername = "localhost";
+                $database = "membership_gym";
+                $username = "root";
+                $password_db = "";
+
+                // Membuat koneksi ke database
+                $conn = mysqli_connect($servername, $username, $password_db, $database);
+
+                // Memeriksa koneksi
+                if (!$conn) {
+                    die("Koneksi Gagal : " . mysqli_connect_error());
+                }
+
+                // Query untuk mengambil data user terbaru dari database
+                $query_select_data = "SELECT * FROM user ORDER BY id_user DESC LIMIT 1";
+
+                // Menjalankan query
+                $result = mysqli_query($conn, $query_select_data);
+
+                // Memeriksa apakah ada data yang ditemukan
+                if (mysqli_num_rows($result) > 0) {
+                    // Menampilkan data
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<p>Email: " . $row["email"] . "</p>";
+                        echo "<p>Nama Depan: " . $row["nama_depan"] . "</p>";
+                        echo "<p>Nama Belakang: " . $row["nama_belakang"] . "</p>";
+                        echo "<p>Tanggal Lahir: " . $row["tgl_lahir"] . "</p>";
+                        echo "<p>No. Telepon: " . $row["no_telp"] . "</p>";
+                    }
+                } else {
+                    echo "Tidak ada data yang ditemukan.";
+                }
+
+                // Menutup koneksi
+                mysqli_close($conn);
+                ?>
             </div>
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="kolomjudul" style="margin-top: 1.2rem;">
-            <a href="indexnew.php" class="satu"  style="text-decoration: none;">Membership<span>Gym.</span></a>
-            <p>Tune Your Body <br>Transform Your Life!</p>
-        </div>
-        <div class="isi">
-            <div class="kolomsatu">
-                <h4>MEMBERSHIP</h4>
-                <a href="layanann.php" style="text-decoration: none; color: white;"><p>Layanan</p></a>
-                <a href="profil.php" style="text-decoration: none; color: white;"><p>Join Online</p></a>
-            </div>
-            <div class="kolomdua">
-                <h4>FEATURE</h4>
-                <a href="galerii.php" style="text-decoration: none; color: white;"><p>Galeri</p></a>
-                <a href="lokasii.php" style="text-decoration: none; color: white;"><p>Location</p></a>
-            </div>
-            <div class="kolomtiga">
-                <h4>OUR COMPANY</h4>
-                <a href="aboutus.php" style="text-decoration: none; color: white;"><p>About Us</p></a>
-                <a href="faq.php" style="text-decoration: none;color: white;"><p>FAQ</p></a>
-            </div>
-            <div class="kolomempat">
-                <h4>CONTACT US</h4>
-                <p>+62 812 4000 4000</p>
-                <p>membershipgym@gmail.com</p>
-                <a href="testimonii.php" style="text-decoration: none;color: white;"><p>Testimoni</p></a>
-            </div>
-        </div>
-    </footer>
-
-    <hr style="margin-right: 4rem; margin-left: 4rem; margin-top: 4rem;">
-
-    <div class="bawah">
-        <p>Created by <a>Kelompok 2 SID</a>. | &copy; 2024. |  Award Winning Fitness Chain in South East Asia. All Rights reserved. <a href="termss.php" style="color: white">Terms & Conditions</a> | <a href="privacyy.php" style="color: white;">Privacy Policy</a></p>
-    </div>
+    <!-- Your footer and additional HTML content -->
 
     <!-- Additional scripts here -->
     <script src="index.js"></script>
