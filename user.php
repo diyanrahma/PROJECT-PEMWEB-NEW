@@ -1,39 +1,46 @@
 <?php
-if (isset($_POST['email']) && isset($_POST['nama_lengkap']) && isset($_POST['tgl_lahir']) && isset($_POST['no_telp'])) {
+if (isset($_POST['email']) && isset($_POST['nama_depan']) && isset($_POST['nama_belakang']) && isset($_POST['tgl_lahir']) && isset($_POST['no_telp'])) {
+    // Mendapatkan data dari form
     $email = $_POST["email"]; 
     $nama_depan = $_POST["nama_depan"];
     $nama_belakang = $_POST["nama_belakang"];
     $tgl_lahir = $_POST["tgl_lahir"];
     $no_telp = $_POST["no_telp"];
 
+    // Konfigurasi database
     $servername = "localhost";
     $database = "membership_gym";
     $username = "root";
     $password_db = "";
 
+    // Membuat koneksi ke database
     $conn = mysqli_connect($servername, $username, $password_db, $database);
 
+    // Memeriksa koneksi
     if (!$conn) {
         die("Koneksi Gagal : " . mysqli_connect_error());
     }
 
-    $query_check_email = "SELECT * FROM user WHERE email = '$email'";
-    $result_check_email = mysqli_query($conn, $query_check_email);
+    // Mendapatkan ID user baru
+    $query_get_next_id = "SELECT CONCAT('U', LPAD(COALESCE(MAX(SUBSTRING(id_user, 2) + 1), 1), 7, '0')) AS next_id FROM user";
+    $result_get_next_id = mysqli_query($conn, $query_get_next_id);
+    $row = mysqli_fetch_assoc($result_get_next_id);
+    $next_id = $row['next_id'];
 
-    if (mysqli_num_rows($result_check_email) > 0) {
-        echo "Email sudah terdaftar.";
+    // Membuat query untuk menyimpan data pengguna ke database
+    $query_insert_data = "INSERT INTO user (id_user, email, nama_depan, nama_belakang, tgl_lahir, no_telp) 
+                          VALUES ('$next_id', '$email', '$nama_depan', '$nama_belakang', '$tgl_lahir', '$no_telp')";
+
+    // Menjalankan query dan memeriksa keberhasilan
+    if (mysqli_query($conn, $query_insert_data)) {
+        // Menutup koneksi dan mengarahkan pengguna ke halaman userdisplay.php
+        mysqli_close($conn);
+        header("Location: userdisplay.php");
+        exit();
     } else {
-        $query_insert_data = "INSERT INTO user (email, nama_lengkap, tgl_lahir, no_telp) VALUES ('$email', '$nama_lengkap', '$tgl_lahir', '$no_telp')";
-        if (mysqli_query($conn, $query_insert_data)) {
-            mysqli_close($conn);
-            header("Location: userdisplay.php");
-            exit();
-        } else {
-            echo "Error: " . $query_insert_data . "<br>" . mysqli_error($conn);
-        }
+        // Menampilkan pesan kesalahan jika query tidak berhasil
+        echo "Error: " . $query_insert_data . "<br>" . mysqli_error($conn);
     }
-
-    mysqli_close($conn);
 }
 ?>
 
@@ -44,6 +51,7 @@ if (isset($_POST['email']) && isset($_POST['nama_lengkap']) && isset($_POST['tgl
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User</title>
 
+    <!-- Your CSS links and other meta tags -->
     <link rel="stylesheet" href="user.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,31 +60,8 @@ if (isset($_POST['email']) && isset($_POST['nama_lengkap']) && isset($_POST['tgl
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/0305f8347c.js" crossorigin="anonymous"></script>
 </head>
-
 <body>
-    <nav class="navbar" style="background-color: #241c15;">
-
-        <a href="indexnew.php" class="navbar-logo">Membership<span>Gym.</span></a>
-
-        <div class="navbar-nav">
-            <a href="indexnew.php">HOME</a>
-            <a href="layanann.php">LAYANAN</a>
-            <a href="galerii.php">GALERI</a>
-            <a href="contactt.php">CONTACT US</a>
-            <a href="profil.php" class="satu">JOIN ONLINE ></a>
-
-            <a href="lokasii.php" id="lokasi" class="two"><i class="fa-solid fa-location-dot two" style="font-size: 1.3rem;"></i></a>
-            <a href="indexnew.php" id="user" class="three"><i class="fa-solid fa-user three" style="font-size: 1.3rem;"></i></a>
-
-            <a href="#" id="translate">ID | EN ></a>
-        </div>
-    </nav>
-
-    <section class="hero" id="home">
-        <main class="content">
-            <h1>PROFIL <br><span>SAYA</span></h1>
-        </main>
-    </section>
+    <!-- Your navigation bar and other HTML content -->
 
     <section class="isii">
         <div class="pertama">
@@ -84,25 +69,32 @@ if (isset($_POST['email']) && isset($_POST['nama_lengkap']) && isset($_POST['tgl
         </div>
         <div class="kedua">
             <div>
-            <form action="userdisplay.php" method="POST">
-                <label for="email" class="atas" style="padding-right: 108px;">Email </label>
+            <form action="user.php" method="POST">
+                <!-- Input field for email -->
+                <label for="email" class="atas">Email </label>
                 <input type="email" id="email" name="email" required><br><br>
 
-                <label for="nama_depan" class="atas" style="padding-right: 28px;">Nama Lengkap </label>
+                <!-- Input field for first name -->
+                <label for="nama_depan" class="atas">Nama Depan </label>
                 <input type="text" id="nama_depan" name="nama_depan" required><br><br>
 
-                <label for="nama_belakang" class="atas" style="padding-right: 28px;">Nama Lengkap </label>
+                <!-- Input field for last name -->
+                <label for="nama_belakang" class="atas">Nama Belakang </label>
                 <input type="text" id="nama_belakang" name="nama_belakang" required><br><br>
 
-                <label for="tgl_lahir" class="atas" style="padding-right: 42px;">Tanggal Lahir </label>
+                <!-- Input field for date of birth -->
+                <label for="tgl_lahir" class="atas">Tanggal Lahir </label>
                 <input type="date" id="tgl_lahir" name="tgl_lahir" required><br><br>
 
-                <label for="no_telp" class="atas" style="padding-right: 86px;">Telepon </label>
+                <!-- Input field for phone number -->
+                <label for="no_telp" class="atas">Telepon </label>
                 <input type="text" id="no_telp" name="no_telp" required><br><br>
 
-             <button type="login" class="log">Kirim</button>
-             </form>
+                <!-- Submit button -->
+                <button type="submit" class="log">Kirim</button>
+            </form>
 
+                <!-- Logout link -->
                 <p class="empat">
                     <a href="userdisplay.php" style="color: #241c15;">Logout</a>
                 </p>
@@ -137,17 +129,17 @@ if (isset($_POST['email']) && isset($_POST['nama_lengkap']) && isset($_POST['tgl
                 <h4>CONTACT US</h4>
                 <p>+62 812 4000 4000</p>
                 <p>membershipgym@gmail.com</p>
-                <a href="testimonii.php" style="text-decoration: none;color: white;"><p>Testimoni</p></a>
+                <a href="testimonii.php" style="text-decoration:none;color: white;"><p>Testimoni</p></a>
             </div>
         </div>
     </footer>
-
     <hr style="margin-right: 4rem; margin-left: 4rem; margin-top: 4rem;">
 
-    <div class="bawah">
-        <p>Created by <a>Kelompok 2 SID</a>. | &copy; 2024. |  Award Winning Fitness Chain in South East Asia. All Rights reserved. <a href="termss.php" style="color: white">Terms & Conditions</a> | <a href="privacyy.php" style="color: white;">Privacy Policy</a></p>
-    </div>
+<div class="bawah">
+    <p>Created by <a>Kelompok 2 SID</a>. | &copy; 2024. |  Award Winning Fitness Chain in South East Asia. All Rights reserved. <a href="termss.php" style="color: white">Terms & Conditions</a> | <a href="privacyy.php" style="color: white;">Privacy Policy</a></p>
+</div>
 
-    <script src="index.js"></script>
+<!-- Your JavaScript links and other scripts -->
+<script src="index.js"></script>
 </body>
 </html>
